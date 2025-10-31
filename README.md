@@ -15,12 +15,13 @@
     - 2, 4, 5, 6, 7 -> 0 points
 
 ### Gameplay
-* At the start of the game, a random card gets extracted from the 40 available and its seed becomes the "Briscola seed".  
-* Each player is then given 3 cards, drafted from the top of the deck (as it will always be for the rest of the game). The first player to start is chosen randomly.
+* Each player is given 3 cards, drafted from the top of the deck (as it will always be for the rest of the game). The first player to start is chosen randomly.
+* Then, a random card gets extracted from the 36 remaining and its seed becomes the "Briscola seed".  
 * The player that starts the turn puts down a card from his hand. The other player choses whater to take on the card or allow his opponent to "win the hand". There are various possibilities, depending on the cards in play, which determine who will take them:
     - If both cards have the *same seed*, the higher value wins (*also applies to Briscola cards*).  
     - If one card is the *Briscola card*, it beats any non-Briscola card.  
     - If the cards have *different seeds* and neither is Briscola, the first card wins.
+* After finishing the turn, each player draws a card; the player who won the hand is the first one to draw.
     
 ### Scoring
 * At the end of the game, the player with the *highest number of points* (sum of the values of the cards it collected) *wins*.
