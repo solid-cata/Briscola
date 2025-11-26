@@ -1,5 +1,7 @@
-from game_classes import Seed, Card, Player
-import useful_funcs
+from game_classes import Seed, Card, Player, Opponent
+# heard this is not good practice but i'll try my best not to give the same name
+# to functions and variables in the main file and in other files
+from useful_funcs import * 
 import random # importing the random library to help in random decision such ad shuffling the cards
 
 # Now we will create the list of the cards by initiating each one of them
@@ -30,7 +32,7 @@ def game() -> None:
 
     # Creating the two players' objects
     p1 : Player = Player() # you!!!
-    p2 : Player = Player()
+    p2 : Player = Opponent()
 
     # Randomly choosing which player will start: 0 for p1, 1 for p2
     who_starts : int = random.randint(0, 1)
@@ -52,7 +54,7 @@ def game() -> None:
             p1.hand.append(cards.pop())
 
     # Just to stop execution to make the user read
-    useful_funcs.require_confirmation()
+    require_confirmation()
 
     # Now we are goin to extract the "Briscola" card from the top (the end of the list)
     # Once we extract it, though, we are going to insert it at the bottom (the start of the list)
@@ -71,16 +73,16 @@ def game() -> None:
         print(f"Turn {turn + 1}")
         cards_on_table : dict[Card: int] = {} # this dictionary represents who placed the card and what card he placed
 
-        useful_funcs.show_briscola(briscola_card)
-        useful_funcs.show_hand(p1.hand) # showing hand at the start of each turn
+        show_briscola(briscola_card)
+        p1.show_hand() # showing hand at the start of each turn
         print()
 
-        first_card, second_card = useful_funcs.playing_turn(who_starts, p1.hand, p2.hand, cards_on_table)          
+        first_card, second_card = playing_turn(who_starts, p1, p2, cards_on_table)          
 
         # After playing the actual turn, we are going to check the various condition to decide
         # who is going to win the hand
 
-        who_starts = useful_funcs.check_cards(first_card, second_card, cards_on_table, briscola_seed)
+        who_starts = check_cards(first_card, second_card, cards_on_table, briscola_seed)
         
         # Deciding here who gets the cards
         if not who_starts:
@@ -100,8 +102,9 @@ def game() -> None:
                 p1.hand.append(cards.pop())
 
         print()
-        useful_funcs.require_confirmation() # before another loop iteration requiring confirmation and clearing screen
+        require_confirmation() # before another loop iteration requiring confirmation and clearing screen
 
-    useful_funcs.calculate_winner(p1.collected_cards, p2.collected_cards)
+    calculate_winner(p1.collected_cards, p2.collected_cards)
 
-game()
+if __name__ == "__main__":
+    game()

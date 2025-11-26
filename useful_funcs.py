@@ -1,5 +1,5 @@
 import os # to clear screen
-from game_classes import Card
+from game_classes import Card, Seed, Player, Opponent
 from random import randint
 
 def require_confirmation() -> None:
@@ -15,45 +15,26 @@ def show_briscola(briscola_card : Card) -> None:
     print(f"The Briscola card is '{briscola_card.name}' and the Briscola seed is {briscola_card.seed}!\n")
 
 
-def show_hand(player_hand : list[Card]) -> None:
-    """ Procedure that displays the player's hand """
-
-    print("Your hand:")
-    for i in range(len(player_hand)):
-        print(f"{i+1}. Name: {player_hand[i].name}", end=", ")
-        print(f"Value: {player_hand[i].value}", end=", ")
-        print(f"Seed: {player_hand[i].seed}")
-
-
-def choose_card_to_play(player_hand : list[Card]) -> Card:
-    """ Function that asks the active player which card to play """
-
-    chosen_card = input(">> Choose a card to play (please enter a number between 1 and 3): ")
-    while not chosen_card.isnumeric() or int(chosen_card) not in range(1, len(player_hand) + 1):
-        chosen_card = input(">> Choose a valid number: ")
-    return player_hand.pop(int(chosen_card) - 1)
-
-
-def playing_turn(starting_player: int, p1_hand : list[Card], p2_hand : list[Card], table_cards : dict[Card: int]) -> None:
+def playing_turn(starting_player: int, player1: Player, player2: Opponent, table_cards : dict[Card: int]) -> None:
     """ Procedure to lighten the main file code that essentially manages the turn itself """
 
     if not starting_player: # your case!!
-        card1 = choose_card_to_play(p1_hand) # you choose the first card from your hand
+        card1 = player1.choose_card_to_play() # you choose the first card from your hand
         print()
         print(f"You played: {card1.name}")
         table_cards[card1] = starting_player
 
-        card2 = p2_hand.pop(randint(0, len(p2_hand)-1)) # opponent randomly choses a card from his hand
+        card2 = player2.hand.pop(randint(0, len(player2.hand)-1)) # opponent randomly choses a card from his hand
         print(f"Your opponent played: Name: {card2.name}, Value: {card2.value}, Seed: {card2.seed}\n")
         table_cards[card2] = 1
 
     else: # opponent case
         # TODO implement opponent logic (not in the short term)
-        card1 = p2_hand.pop(randint(0, len(p2_hand)-1)) # opponent randomly choses a card from his hand
+        card1 = player2.hand.pop(randint(0, len(player2.hand)-1)) # opponent randomly choses a card from his hand
         print(f"Your opponent played: Name: {card1.name}, Value: {card1.value}, Seed: {card1.seed}")
         table_cards[card1] = starting_player
 
-        card2 = choose_card_to_play(p1_hand) # you choose the card from your hand
+        card2 = player1.choose_card_to_play() # you choose the card from your hand
         print(f"You played: {card2.name}\n")
         table_cards[card2] = 0
     
@@ -95,9 +76,9 @@ def check_cards(card1: Card, card2: Card, table_cards : dict[Card: int], briscol
     return starting_player
 
 
-def calculate_winner(p1_total_cards : list[Card], p2_total_cards : list[Card]) -> None:
-    p1_points = sum( [card.value for card in p1_total_cards] )
-    p2_points = sum( [card.value for card in p2_total_cards] )
+def calculate_winner(player1: Player, player2: Opponent) -> None:
+    p1_points = sum( [card.value for card in player1.collected_cards] )
+    p2_points = sum( [card.value for card in player2.collected_cards] )
     
     if p1_points > p2_points:
         print("You won!!! Congrats!")
